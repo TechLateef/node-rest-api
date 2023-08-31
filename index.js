@@ -1,11 +1,18 @@
-const express = require('express')
-const user = require('./routers/user.route')
-const app = express()
 
-// app.use('/api/user', user)
+require("dotenv").config();
 
-require('./startup/route')(app)
+const http = require("http");
 
-app.listen(3000, ()=>{
-    console.log("Runing");
-})
+const app = require("./startup/app");
+
+
+
+require('./routers')(app)
+require('./middleware')(app)
+const PORT = process.env.PORT || 8080;
+
+const server = http.createServer(app);
+
+server.listen(PORT, function () {
+  console.log(`Your app is listening on port `, PORT);
+});

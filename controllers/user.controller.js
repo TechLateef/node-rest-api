@@ -1,20 +1,27 @@
 const { StatusCodes } = require('http-status-codes');
 const {User} = require('../models')
 const catchAsync = require('../utils/catchAsync')
-
-exports.createUser = catchAsync(async(req, res)=>{
-    const {fullname, email, password} = req.body;
-    const newUser = await User.create({fullname, email, password})
-
-    if(!newUser){
-        res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({status:'false', msg:"unable to create user "})
+const UsersServices =  require('../services/user.service');
+exports.createUser = catchAsync(async (req, res, next) => {
+    try {
+      const userData = await UsersServices.createUser(req);
+  
+      if (!userData) {
+        return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ msg: 'Something went wrong creating user' });
+      }
+  
+      res.status(StatusCodes.OK).json({ success: true, msg: 'User created Successfully', data: userData });
+    } catch (ex) {
+      console.error(ex);
+      // You can handle the error here or pass it to the next middleware
+      res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ msg: 'Internal server error' });
     }
-    res.status(StatusCodes.OK).json({success:true, msg:'User reated Successfully', data:newUser})
-})
+  });
+  
 
 exports.getAll = catchAsync(async(req, res , next)=>{
   try{
-const users = await User.findAll()
+    const users = await UsersServices.getAll(req)
 res.status(StatusCodes.OK).json({data:users})
   }catch(ex){
     console.error(ex);
@@ -24,9 +31,8 @@ res.status(StatusCodes.OK).json({data:users})
 exports.update = catchAsync(async(req, res, next)=>{
     try{
         const userId = req.params.id
-       const user = await User.findByPk(userId) 
+       const user = await UsersServices.updateUser(userId, req)
        if(user){
-        await user.update({...req.body})
 
         res.status(StatusCodes.OK).json({success:true, msg:'User updated Successfully', data:user})
        }else{
@@ -41,10 +47,11 @@ exports.update = catchAsync(async(req, res, next)=>{
 
 exports.deleteUser = catchAsync(async(req, res, next)=>{
     try{
-        const user = await User.findByPk(userId)
+        const userId = req.params.id
+        const user = await UsersServices.deleteUser(userId)
 
         if(user){
-            await user.destroy()
+            
             res.status(StatusCodes.OK).json({success:true, msg:'User deleted', data:user})
         } else{
             res.status(StatusCodes.BAD_REQUEST).json({msg:"User not found"})
