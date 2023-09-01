@@ -6,6 +6,7 @@ The root folder contains a node.js server using express. To run the server, foll
 4. Run npm install to install all the depedencies
 5. run npm sequelize-cli db:migrate
 6. Run node index to start the server
+7. Run npm test to run the test
 The application should connect to the default server port (3042) automatically!
 
 #Swagger doc route
