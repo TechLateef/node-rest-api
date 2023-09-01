@@ -1,0 +1,23 @@
+# ingress.yaml
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: noderestapi-ingress
+spec:
+  rules:
+     - http:
+        paths:
+          - pathType: Prefix
+            path: "/"
+            backend:
+              service:
+                name: noderestapi-service
+                port:
+                  number: 80
+          - pathType: Prefix
+            path: "/api/user"
+            backend:
+              service:
+                name: noderestapi-service
+                port:
+                  number: 80

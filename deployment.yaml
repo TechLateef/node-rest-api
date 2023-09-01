@@ -1,0 +1,20 @@
+# deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: noderestapi-deployment
+spec:
+  replicas: 3  # Number of replicas/pods to run
+  selector:
+    matchLabels:
+      app: noderestapi
+  template:
+    metadata:
+      labels:
+        app: noderestapi
+    spec:
+      containers:
+        - name: noderestapi
+          image: mklateef/noderestapi:v1
+          ports:
+            - containerPort: 3000

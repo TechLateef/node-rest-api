@@ -1,5 +1,5 @@
-The root folder contains a node.js,  server using express and mysql for database. make sure you have mysql install on your system,
-To run the server, follow these steps:
+
+The root folder contains a node.js server using express. To run the server, follow these steps:
 1. Clone the repo on your system
 2. cd to node-rest-api
 3. Open a terminal within the /root folder
