@@ -7,9 +7,9 @@ const app = require("./startup/app");
 
 
 
-require('./routers')(app)
-require('./middleware')(app)
-const PORT = process.env.PORT || 8080;
+require('./src/routers')(app)
+require('./src/middleware')(app)
+const PORT = process.env.PORT || 3000;
 
 const server = http.createServer(app);
 
